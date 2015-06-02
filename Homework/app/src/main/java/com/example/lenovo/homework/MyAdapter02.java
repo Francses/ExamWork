@@ -21,7 +21,6 @@ public class MyAdapter02 extends RecyclerView.Adapter<MyViewHolder02> {
     TextView bilittle_num2_text;
     TextView complain_num2_text;
    // ProgressBar progressBar;
-    int a=0;
 
     ArrayList<Information> informations = new ArrayList<Information>();
 
@@ -63,7 +62,7 @@ public class MyAdapter02 extends RecyclerView.Adapter<MyViewHolder02> {
 
     @Override
     public int getItemCount() {
-        return 8;
+        return 20;
     }
 
 

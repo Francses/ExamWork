@@ -31,6 +31,7 @@ public class Friend extends Fragment{
     public String bilittle_num2;
     public String praise_num2;
     public String complain_num2;
+    RecyclerView recyclerView2;
 
     public List<String> authorList = new ArrayList<String>();
     public List<String> timeList = new ArrayList<String>();
@@ -49,7 +50,6 @@ public class Friend extends Fragment{
         return informations;
     }
 
-    RecyclerView recyclerView2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -139,7 +139,7 @@ public class Friend extends Fragment{
                     JSONArray jsonArray = new JSONObject(result.toString()).getJSONArray("comments");
                     Log.d("MainActivity",jsonArray.toString());
                     JSONObject jsonObject;
-                    for (int i=0;i < 8;i++){
+                    for (int i=0;i < 20;i++){
                         jsonObject = jsonArray.getJSONObject(i);
                         Log.d("MyAdapter02222222",jsonObject.toString());
                         author = jsonObject.getString("comment_author");
@@ -164,7 +164,7 @@ public class Friend extends Fragment{
                         Log.d("MainActivity_bilittle",bilittle_num2);
                     }
 
-                    final MyAdapter02 myAdapter02 = new MyAdapter02(getInformation(8));
+                    final MyAdapter02 myAdapter02 = new MyAdapter02(getInformation(20));
                     recyclerView2.setAdapter(myAdapter02);
                 /*jsonObject = jsonArray.getJSONObject(0);
                 author = jsonObject.getString("comment_author");

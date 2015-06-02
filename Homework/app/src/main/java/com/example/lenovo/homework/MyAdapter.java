@@ -1,12 +1,21 @@
 package com.example.lenovo.homework;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +31,9 @@ public class MyAdapter extends Adapter<MyViewHolder> {
     TextView bilittle_num_text;
     TextView complain_num_text;
     ImageView imageView;
+
+    Bitmap bitmap;
+
 
 
     ArrayList<Information_pic> information_pics = new ArrayList<Information_pic>();
@@ -58,6 +70,12 @@ public class MyAdapter extends Adapter<MyViewHolder> {
         String bilittle_num = information_pics.get(position).getBilittle_num();
         String complain_num = information_pics.get(position).getComplain_num();
 
+        url = url.replaceAll("\\\\/", "/");
+        url = url.substring(2, url.length() - 2);
+        Log.d("URLLLLLLLLLLL", url);
+
+        new MyAsyncTask().execute(url);
+
         author_text.setText(author);
         time_text.setText(time);
         praise_num_text.setText(praise_num);
@@ -67,7 +85,39 @@ public class MyAdapter extends Adapter<MyViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 6;
+        return 5;
+    }
+
+    public class MyAsyncTask extends AsyncTask<String,Void,Bitmap> {
+        @Override
+        protected void onPreExecute() {
+            Log.d("MyAdapter", "Start!");
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String url = params[0];
+            URLConnection connection = null;
+            InputStream is;
+            try {
+                connection = new URL(url).openConnection();
+                is = connection.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(is);
+                bitmap = BitmapFactory.decodeStream(bis);
+                is.close();
+                bis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            imageView.setImageBitmap(bitmap);
+            Log.d("onPostExecute", "piccccccccccccccccc");
+        }
     }
 
 }
