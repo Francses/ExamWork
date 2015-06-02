@@ -3,10 +3,8 @@ package com.example.lenovo.homework;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -33,13 +31,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -88,47 +82,9 @@ public class Find extends Fragment{
                             new MyAsyncTask().execute(URL);
                         } else if (position == 1) {
                             Toast.makeText(getActivity(), "Update!", Toast.LENGTH_SHORT).show();
-                            //sendRequestWithHttpClient();
-                            String downloadUrl = "http://hongyan.cqupt.edu.cn/app/com.mredrock.cyxbs.apk";
-                            try {
-                                File downloadFile;
-                                FileOutputStream fileOutputStream = null;
-                                URL apkURL = new URL(downloadUrl);
-                                try {
-                                    HttpURLConnection downConnection = (HttpURLConnection)apkURL.openConnection();
-                                    downConnection.setReadTimeout(5000);
-                                    downConnection.setRequestMethod("GET");
-                                    downConnection.setDoInput(true);
-
-                                    InputStream inputStream = downConnection.getInputStream();
-
-                                    String timeString = String.valueOf(System.currentTimeMillis());
-
-                                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-                                        String sdPath = Environment.getExternalStorageDirectory() + "/";
-                                        File parent1 = Environment.getExternalStorageDirectory();
-                                        Log.e("tag",sdPath);
-                                        downloadFile = new File(parent1+"/test",timeString+".jpg");
-                                        fileOutputStream = new FileOutputStream(downloadFile);byte[] b = new byte[1024*2];
-                                        int len ;
-                                        Log.e("tag", "....................4");
-                                        if (fileOutputStream != null){
-                                            while ((len = inputStream.read(b)) != -1){
-                                                fileOutputStream.write(b,0,len);
-                                            }
-                                        }
-                                        Intent i = new Intent(Intent.ACTION_VIEW);
-                                        i.setDataAndType(Uri.parse("file://" + downloadFile.toString()), "application/vnd.android.package-archive");
-                                        getActivity().startActivity(i);
-
-                                    }
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            }
+                            UpdateManager manager = new UpdateManager(getActivity());
+                            // 检查软件更新
+                            manager.checkUpdate();
                         }
                         mDrawerLayout.closeDrawer(listView);
                     }

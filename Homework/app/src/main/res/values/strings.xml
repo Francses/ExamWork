@@ -9,5 +9,6 @@
     <string name="title_activity_hhh">hhhActivity</string>
     <string name="title_activity_picture">Picture</string>
     <string name="notes">Click the picture to see the big picture,and click the upper right corner to download the update!</string>
+    <string name="soft_update_title">软件更新</string>
 
 </resources>
