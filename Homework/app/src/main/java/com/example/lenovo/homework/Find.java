@@ -88,7 +88,7 @@ public class Find extends Fragment{
                             new MyAsyncTask().execute(URL);
                         } else if (position == 1) {
                             Toast.makeText(getActivity(), "Update!", Toast.LENGTH_SHORT).show();
-                            sendRequestWithHttpClient();
+                            //sendRequestWithHttpClient();
                             String downloadUrl = "http://hongyan.cqupt.edu.cn/app/com.mredrock.cyxbs.apk";
                             try {
                                 File downloadFile;
