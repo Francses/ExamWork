@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 
 public class Picture extends ActionBarActivity {
-
+//
     private ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

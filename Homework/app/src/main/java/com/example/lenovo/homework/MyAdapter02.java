@@ -8,18 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by lenovo on 2015/5/30.
@@ -34,7 +32,7 @@ public class MyAdapter02 extends RecyclerView.Adapter<MyViewHolder02> {
     TextView bilittle_num2_text;
     TextView complain_num2_text;
    // ProgressBar progressBar;
-
+    int a=0;
     String author;
     String time;
     String content;
@@ -59,18 +57,46 @@ public class MyAdapter02 extends RecyclerView.Adapter<MyViewHolder02> {
 
     @Override
     public void onBindViewHolder(MyViewHolder02 myViewHolder02, int i) {
+        a++;
         new ReadHttpGet().execute("http://jandan.net/?oxwlxojflwblxbsapi=jandan.get_duan_comments&page=1");
+
     }
 
     @Override
     public int getItemCount() {
-        return 1;
+        return 8;
     }
 
     public class ReadHttpGet extends AsyncTask<Object, Object, Object> {
         @Override
         protected Object doInBackground(Object... params) {
-            HttpGet httpRequest = new HttpGet(params[0].toString());
+
+            try {
+                URL url=new URL(params[0].toString());
+                try {
+                    HttpURLConnection connection=(HttpURLConnection)url.openConnection();
+                    connection.setConnectTimeout(3000);
+                    connection.setRequestMethod("GET");
+                    connection.setDoInput(true);
+
+                    int code=connection.getResponseCode();
+                    if (code == 200){
+                        Log.d("HttpURLLLLLLLLLLLLLLLL","succeed");
+                        return changeJsonString(connection.getInputStream());
+                    }else {
+                        return "wrong";
+                    }
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            return null;
+
+           /* HttpGet httpRequest = new HttpGet(params[0].toString());
             try {
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpResponse httpResponse = httpClient.execute(httpRequest);
@@ -86,22 +112,39 @@ public class MyAdapter02 extends RecyclerView.Adapter<MyViewHolder02> {
             catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            return null;*/
         }
 
         @Override
         protected void onCancelled(Object result) {
             super.onCancelled(result);
         }
+        private  String changeJsonString(InputStream inputStream) {
+            String jsonString="";
+            try {
+                ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
+                int len=0;
+                byte[] data=new byte[1024];
+                while((len=inputStream.read(data))!=-1) {
+                    outputStream.write(data,0,len);
+                }
+                jsonString=new String(outputStream.toByteArray());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return jsonString;
+        }
         @Override
         protected void onPostExecute(Object result) {
-            super.onPostExecute(result);
-            try {
-                JSONArray jsonArray = new JSONObject(result.toString()).getJSONArray("comments");
-                Log.d("MainActivity",jsonArray.toString());
-                JSONObject jsonObject;
+            if (result != null){
+                super.onPostExecute(result);
+                try {
+                    JSONArray jsonArray = new JSONObject(result.toString()).getJSONArray("comments");
+                    Log.d("MainActivity",jsonArray.toString());
+                    JSONObject jsonObject;
 
-                /*jsonObject = jsonArray.getJSONObject(0);
+                jsonObject = jsonArray.getJSONObject(a);
                 author = jsonObject.getString("comment_author");
                 time = jsonObject.getString("comment_date");
                 content = jsonObject.getString("comment_content");
@@ -121,35 +164,36 @@ public class MyAdapter02 extends RecyclerView.Adapter<MyViewHolder02> {
                 Log.d("MainActivity_content", content + "aa");
                 Log.d("MainActivity_praise", praise_num2 + "aa");
                 Log.d("complain_complain", complain_num2 + "aa");
-                Log.d("MainActivity_bilittle", bilittle_num2+ "aa");*/
+                Log.d("MainActivity_bilittle", bilittle_num2+ "aa");
 
-                for (int i=0;i < 5;i++){
-                    jsonObject = jsonArray.getJSONObject(i);
-                    Log.d("MyAdapter02222222",jsonObject.toString());
-                    author = jsonObject.getString("comment_author");
-                    time = jsonObject.getString("comment_date");
-                    content = jsonObject.getString("comment_content");
-                    praise_num2 = jsonObject.getString("vote_positive");
-                    complain_num2 = jsonObject.getString("vote_negative");
-                    bilittle_num2 = jsonObject.getString("comment_approved");
+                    /*for (int i=0;i < 5;i++){
+                        jsonObject = jsonArray.getJSONObject(i);
+                        Log.d("MyAdapter02222222",jsonObject.toString());
+                        author = jsonObject.getString("comment_author");
+                        time = jsonObject.getString("comment_date");
+                        content = jsonObject.getString("comment_content");
+                        praise_num2 = jsonObject.getString("vote_positive");
+                        complain_num2 = jsonObject.getString("vote_negative");
+                        bilittle_num2 = jsonObject.getString("comment_approved");
 
-                    author_text.setText(author);
-                    time_text.setText(time);
-                    content_text.setText(content);
-                    praise_num2_text.setText(praise_num2);
-                    bilittle_num2_text.setText(bilittle_num2);
-                    complain_num2_text.setText(complain_num2);
+                        author_text.setText(author);
+                        time_text.setText(time);
+                        content_text.setText(content);
+                        praise_num2_text.setText(praise_num2);
+                        bilittle_num2_text.setText(bilittle_num2);
+                        complain_num2_text.setText(complain_num2);
 
-                    Log.d("MainActivity_author", author);
-                    Log.d("MainActivity_time",time);
-                    Log.d("MainActivity_content",content);
-                    Log.d("MainActivity_praise",praise_num2);
-                    Log.d("complain_complain",complain_num2);
-                    Log.d("MainActivity_bilittle",bilittle_num2);
+                        Log.d("MainActivity_author", author);
+                        Log.d("MainActivity_time",time);
+                        Log.d("MainActivity_content",content);
+                        Log.d("MainActivity_praise",praise_num2);
+                        Log.d("complain_complain",complain_num2);
+                        Log.d("MainActivity_bilittle",bilittle_num2);
+                    }*/
                 }
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
            // progressBar.setVisibility(View.GONE);
         }
