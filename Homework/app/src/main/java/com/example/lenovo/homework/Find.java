@@ -47,6 +47,8 @@ import java.util.List;
 
 
 public class Find extends Fragment{
+
+    int h = 0;
     private DrawerLayout mDrawerLayout;
     private List<Item> list = new ArrayList<Item>();
     Button buttonx;
@@ -58,7 +60,6 @@ public class Find extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.find,container,false);
-        initItem();
         return view;
     }
 
@@ -69,6 +70,10 @@ public class Find extends Fragment{
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         imageView = (ImageView) view.findViewById(R.id.mredrock_pic);
         buttonx = (Button)view.findViewById(R.id.button_drawer);
+        if (h == 0) {
+            initItem();
+            h = 1;
+        }
         buttonx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
