@@ -134,7 +134,7 @@ public class FriendChat extends Fragment{
                     JSONArray jsonArray = new JSONObject(result.toString()).getJSONArray("comments");
                     Log.d("MainActivity",jsonArray.toString());
                     JSONObject jsonObject;
-                    for (int i=0;i < 6;i++){
+                    for (int i=0;i < 8;i++){
                         jsonObject = jsonArray.getJSONObject(i);
                         Log.d("MyAdapter02222222",jsonObject.toString());
                         author = jsonObject.getString("comment_author");
@@ -159,7 +159,7 @@ public class FriendChat extends Fragment{
                         Log.d("MainActivity_bilittle",bilittle_num);
                     }
 
-                    final MyAdapter myAdapter = new MyAdapter(getInformation_pic(6));
+                    final MyAdapter myAdapter = new MyAdapter(getInformation_pic(8));
                     recyclerView.setAdapter(myAdapter);
                 /*jsonObject = jsonArray.getJSONObject(0);
                 author = jsonObject.getString("comment_author");

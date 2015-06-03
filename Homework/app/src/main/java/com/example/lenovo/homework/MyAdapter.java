@@ -18,10 +18,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-/**
- * Created by lenovo on 2015/5/30.
- */
+
 public class MyAdapter extends Adapter<MyViewHolder> {
+
     TextView author_text;
     TextView bilittle_text;
     TextView complain_text;
@@ -30,11 +29,8 @@ public class MyAdapter extends Adapter<MyViewHolder> {
     TextView praise_num_text;
     TextView bilittle_num_text;
     TextView complain_num_text;
-    ImageView imageView;
-
     Bitmap bitmap;
-
-
+    String url;
 
     ArrayList<Information_pic> information_pics = new ArrayList<Information_pic>();
 
@@ -42,12 +38,12 @@ public class MyAdapter extends Adapter<MyViewHolder> {
         this.information_pics = information_pics;
     }
 
+  //  ImageView imageView;
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View item = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycylerview_item,viewGroup,false);
         MyViewHolder vh = new MyViewHolder(item);
-
         author_text = (TextView)item.findViewById(R.id.author);
         time_text = (TextView)item.findViewById(R.id.time);
         praise_num_text = (TextView)item.findViewById(R.id.praise_num);
@@ -56,13 +52,18 @@ public class MyAdapter extends Adapter<MyViewHolder> {
         complain_text = (TextView)item.findViewById(R.id.complain);
         bilittle_text = (TextView)item.findViewById(R.id.bilittle);
         praise_text = (TextView)item.findViewById(R.id.praise);
-        imageView = (ImageView)item.findViewById(R.id.beauty_image);
+       // imageView = (ImageView)item.findViewById(R.id.beauty_image);
         //  progressBar = (ProgressBar)item.findViewById(R.id.progressBar_1);
         return vh;
     }
-
+    ImageView imageView1;
+    int h;
     @Override
     public void onBindViewHolder(MyViewHolder myViewHolder, int position) {
+
+
+        myViewHolder.imageView.setTag(position);
+        h = position;
         String author = information_pics.get(position).getAuthor();
         String time = information_pics.get(position).getTime();
         String url = information_pics.get(position).getUrl();
@@ -73,7 +74,9 @@ public class MyAdapter extends Adapter<MyViewHolder> {
         url = url.replaceAll("\\\\/", "/");
         url = url.substring(2, url.length() - 2);
         Log.d("URLLLLLLLLLLL", url);
-
+        imageView1 = myViewHolder.imageView;
+        imageView1.setTag(h);
+        Log.d("hhhonBindViewHolder", "h的值为" + h);
         new MyAsyncTask().execute(url);
 
         author_text.setText(author);
@@ -83,20 +86,15 @@ public class MyAdapter extends Adapter<MyViewHolder> {
         complain_num_text.setText(complain_num);
     }
 
-    @Override
-    public int getItemCount() {
-        return 5;
-    }
-
     public class MyAsyncTask extends AsyncTask<String,Void,Bitmap> {
         @Override
         protected void onPreExecute() {
-            Log.d("MyAdapter", "Start!");
+            Log.d("MyAdapter","Start!");
         }
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            String url = params[0];
+            url = params[0];
             URLConnection connection = null;
             InputStream is;
             try {
@@ -115,9 +113,18 @@ public class MyAdapter extends Adapter<MyViewHolder> {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            imageView.setImageBitmap(bitmap);
-            Log.d("onPostExecute", "piccccccccccccccccc");
+            Log.d("hhhhonPostExecute","h的值为" + h);
+                if (imageView1.getTag() != null && imageView1.getTag().equals(h)){
+                    imageView1.setImageBitmap(bitmap);
+                }
+            //imageView.setImageBitmap(bitmap);
         }
     }
+
+    @Override
+    public int getItemCount() {
+        return 8;
+    }
+
 
 }

@@ -18,7 +18,7 @@ public class MyViewHolder extends ViewHolder {
     public TextView complain_num;
     public TextView author;
     public TextView time;
-    public ImageView beauty_image;
+    public ImageView imageView;
 
     public MyViewHolder(View view){
         super(view);
@@ -30,6 +30,6 @@ public class MyViewHolder extends ViewHolder {
         complain_num = (TextView)itemView.findViewById(R.id.complain_num);
         author = (TextView)itemView.findViewById(R.id.author);
         time = (TextView)itemView.findViewById(R.id.time);
-        beauty_image = (ImageView)itemView.findViewById(R.id.beauty_image);
+        imageView = (ImageView)itemView.findViewById(R.id.beauty_image);
     }
 }
